@@ -70,12 +70,12 @@
 
         .gift.opened { opacity: 0.5; cursor: default; }
 
-        #flowerPage {
+        #flowerPage, #teddyPage, #idiotPage {
             display: none;
-            background: #f8d7df;
-            color: #b30059;
             padding: 20px;
         }
+
+        #flowerPage { background: #f8d7df; color: #b30059; }
 
         .lang-box {
             background: #f4b6c2;
@@ -86,11 +86,9 @@
             max-width: 300px;
         }
 
-        #teddyPage {
-            display: none;
-            background: #fff;
-            color: #333;
-        }
+        #teddyPage { background: #fff; color: #333; }
+
+        #idiotPage { background: #222; color: #fff; }
 
         #letterPage {
             display: none;
@@ -129,6 +127,14 @@
             <button id="yesBtn">YES ❤️</button>
             <button id="noBtn">NO 😭</button>
         </div>
+        <p style="margin-top: 50px; opacity: 0.6; cursor: pointer;" onclick="viewIdiot()">View the Terrible person caleb</p>
+    </section>
+
+    <section id="idiotPage">
+        <h1>Terrible Person Identified</h1>
+        <img src="idiot.jpg" width="250" style="border-radius:20px; border: 5px solid red;">
+        <p>I'll do better I promise, Love,,,</p>
+        <button onclick="closeIdiot()" style="background: white; color: black;">Go Back</button>
     </section>
 
     <section id="giftSection" style="display:none;">
@@ -153,7 +159,7 @@
     <section id="teddyPage">
         <h1 style="color: #ff4da6;">A Big Hug for You!</h1>
         <img src="teddy.jpg" width="250" style="border-radius:20px;">
-        <h2>Meet MAYA the Bear</h2>
+        <h2>Virtually now, real later.</h2>
         <button onclick="backToGifts()" style="background:#ff4da6; color:white;">Back to Gifts 🎁</button>
     </section>
 
@@ -179,6 +185,15 @@
     let giftsOpened = { flowers: false, teddy: false };
     let musicStarted = false;
 
+    // No button messages loop
+    const messages = [
+        "nope not an option",
+        "Zae !!!!",
+        "say Prsss say yes",
+        "Weh choose another option"
+    ];
+    let msgIndex = 0;
+
     function startMusic() {
         if (!musicStarted) {
             introMusic.play().catch(e => console.log("Music waiting"));
@@ -188,26 +203,36 @@
 
     noBtn.onclick = function() {
         noBtn.style.position = "fixed";
-        let x = Math.random() * (window.innerWidth - 100);
-        let y = Math.random() * (window.innerHeight - 50);
-        noBtn.style.left = x + "px";
-        noBtn.style.top = y + "px";
-        question.innerHTML = "prsss Nooo ";
+        
+        // Let it run to the sides (left 10% or right 80%)
+        let sideX = Math.random() < 0.5 ? 50 : (window.innerWidth - 150);
+        let randomY = Math.random() * (window.innerHeight - 100);
+        
+        noBtn.style.left = sideX + "px";
+        noBtn.style.top = randomY + "px";
+        
+        // Loop messages
+        question.innerHTML = messages[msgIndex];
+        msgIndex = (msgIndex + 1) % messages.length;
     };
 
     document.getElementById("yesBtn").onclick = function() {
-        // 🎊 FIRE CONFETTI
+        // Heart-shaped confetti
+        var scalar = 2;
+        var heart = confetti.shapeFromPath({ path: 'M0 10 C0 6, 3 2, 6 2 C9 2, 12 6, 12 10 C12 14, 6 20, 0 24 C-6 20, -12 14, -12 10 C-12 6, -9 2, -6 2 C-3 2, 0 6, 0 10' });
+
         confetti({
-            particleCount: 150,
+            shapes: [heart],
+            particleCount: 80,
             spread: 70,
             origin: { y: 0.6 },
-            colors: ['#ff4da6', '#ffffff', '#ff66cc']
+            colors: ['#ff4da6', '#ff0000', '#ffffff'],
+            scalar: scalar
         });
 
         introMusic.pause();
         forgiveMusic.play();
         
-        // Short delay so she sees the confetti before the page changes
         setTimeout(() => {
             document.getElementById("apologySection").style.display = "none";
             document.getElementById("giftSection").style.display = "flex";
@@ -238,6 +263,16 @@
         } else {
             document.getElementById("giftSection").style.display = "flex";
         }
+    }
+
+    // Caleb Section Logic
+    function viewIdiot() {
+        document.getElementById("apologySection").style.display = "none";
+        document.getElementById("idiotPage").style.display = "flex";
+    }
+    function closeIdiot() {
+        document.getElementById("idiotPage").style.display = "none";
+        document.getElementById("apologySection").style.display = "flex";
     }
 </script>
 
