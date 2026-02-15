@@ -156,6 +156,10 @@
         <div class="lang-box"><b>KISII</b>: Nakonde Ninye</div>
         <div class="lang-box"><b>SWAHILI</b>: Nakupenda</div>
         <div class="lang-box"><b>ITALIAN</b>: Ti Amo</div>
+        <div class="lang-box"><b>GERMAN</b>: Ich Liebe Dich</div>
+        <div class="lang-box"><b>JAPANESE</b>: 愛してる</div>
+        <div class="lang-box"><b>KOREAN</b>: 사랑해</div>
+        <div class="lang-box"><b>CHINESE</b>: 我爱你</div>
 
         <button onclick="backToGifts()" style="background:#b30059; color:white;">Back to Gifts 🎁</button>
     </section>
@@ -192,23 +196,21 @@
     }
 
     function handleYesClick() {
-        // 🎊 Heart Confetti Logic
-        const heart = confetti.shapeFromPath({ path: 'M0 10 C0 6, 3 2, 6 2 C9 2, 12 6, 12 10 C12 14, 6 20, 0 24 C-6 20, -12 14, -12 10 C-12 6, -9 2, -6 2 C-3 2, 0 6, 0 10' });
-        
+        // 🎊 Confetti
         confetti({
-            shapes: [heart],
-            particleCount: 100,
-            spread: 90,
+            particleCount: 150,
+            spread: 100,
             origin: { y: 0.6 },
             colors: ['#ff4da6', '#ff0000', '#ffffff'],
-            scalar: 2
+            shapes: ['heart', 'circle']
         });
 
         introMusic.pause();
         forgiveMusic.play();
 
         document.getElementById("apologySection").style.display = "none";
-        document.getElementById("giftSection").style.display = "flex";
+        document.getElementById("giftSection").style.display = "block";
+        document.querySelector(".gifts-container").style.display = "flex";
     }
 
     const messages = ["nope not an option", "Zae !!!!", "say Prsss say yes", "Weh choose another option"];
@@ -244,7 +246,7 @@
         if (giftsOpened.flowers && giftsOpened.teddy) {
             document.getElementById("letterPage").style.display = "flex";
         } else {
-            document.getElementById("giftSection").style.display = "flex";
+            document.getElementById("giftSection").style.display = "block";
         }
     }
 
