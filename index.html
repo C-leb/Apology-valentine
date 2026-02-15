@@ -85,6 +85,16 @@
         #teddyPage { background: #fff; color: #333; }
         #idiotPage { background: #000; color: #fff; }
 
+        .lang-box {
+            background: #f4b6c2;
+            margin: 8px auto;
+            padding: 12px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 300px;
+            font-size: 14px;
+        }
+
         .letter-card {
             background: #fff8e6;
             color: #7a0019;
@@ -128,7 +138,7 @@
 
     <section id="giftSection" style="display:none;">
         <h3>Here are your gifts Maya 🎁</h3>
-        <div id="giftDisplay" class="gifts-container" style="display: flex;">
+        <div class="gifts-container" style="display: flex;">
             <div id="gift1" class="gift" onclick="openGift('flowers')">🎁</div>
             <div id="gift2" class="gift" onclick="openGift('teddy')">🎁</div>
         </div>
@@ -136,9 +146,17 @@
 
     <section id="flowerPage">
         <h1>This is for you 😍</h1>
-        <img src="flowers.jpg" width="220" style="border-radius:20px;">
-        <p><b>ENGLISH</b>: I Love You</p>
-        <p><b>URDU</b>: میں تم سے پیار کرتا ہوں</p>
+        <img src="flowers.jpg" width="220" style="border-radius:20px; margin-bottom: 10px;">
+        
+        <div class="lang-box"><b>ENGLISH</b>: I Love You</div>
+        <div class="lang-box"><b>URDU</b>: میں تم سے پیار کرتا ہوں</div>
+        <div class="lang-box"><b>HINDI</b>: मैं तुमसे प्यार करता हूँ</div>
+        <div class="lang-box"><b>FRENCH</b>: Je T'aime</div>
+        <div class="lang-box"><b>SPANISH</b>: Te Amo</div>
+        <div class="lang-box"><b>KISII</b>: Nakonde Ninye</div>
+        <div class="lang-box"><b>SWAHILI</b>: Nakupenda</div>
+        <div class="lang-box"><b>ITALIAN</b>: Ti Amo</div>
+
         <button onclick="backToGifts()" style="background:#b30059; color:white;">Back to Gifts 🎁</button>
     </section>
 
@@ -173,40 +191,36 @@
         }
     }
 
-    // --- YES BUTTON LOGIC ---
     function handleYesClick() {
-        // 🎊 Fire Confetti
+        // 🎊 Heart Confetti Logic
+        const heart = confetti.shapeFromPath({ path: 'M0 10 C0 6, 3 2, 6 2 C9 2, 12 6, 12 10 C12 14, 6 20, 0 24 C-6 20, -12 14, -12 10 C-12 6, -9 2, -6 2 C-3 2, 0 6, 0 10' });
+        
         confetti({
-            particleCount: 150,
-            spread: 70,
+            shapes: [heart],
+            particleCount: 100,
+            spread: 90,
             origin: { y: 0.6 },
-            colors: ['#ff4da6', '#ffffff']
+            colors: ['#ff4da6', '#ff0000', '#ffffff'],
+            scalar: 2
         });
 
-        // Swap Music
         introMusic.pause();
         forgiveMusic.play();
 
-        // Switch Sections
         document.getElementById("apologySection").style.display = "none";
         document.getElementById("giftSection").style.display = "flex";
     }
 
-    // --- NO BUTTON LOGIC ---
     const messages = ["nope not an option", "Zae !!!!", "say Prsss say yes", "Weh choose another option"];
     let msgIndex = 0;
 
     function handleNoClick() {
         const noBtn = document.getElementById("noBtn");
         noBtn.style.position = "fixed";
-        
-        // Jumps to Far Left or Far Right margins only
-        let sideX = Math.random() < 0.5 ? 30 : (window.innerWidth - 150);
+        let sideX = Math.random() < 0.5 ? 25 : (window.innerWidth - 150);
         let randomY = Math.random() * (window.innerHeight - 100);
-        
         noBtn.style.left = sideX + "px";
         noBtn.style.top = randomY + "px";
-        
         document.getElementById("question").innerHTML = messages[msgIndex];
         msgIndex = (msgIndex + 1) % messages.length;
     }
@@ -227,7 +241,6 @@
     function backToGifts() {
         document.getElementById("flowerPage").style.display = "none";
         document.getElementById("teddyPage").style.display = "none";
-        
         if (giftsOpened.flowers && giftsOpened.teddy) {
             document.getElementById("letterPage").style.display = "flex";
         } else {
