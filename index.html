@@ -1,209 +1,244 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For Maya ❤️</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Maya ❤️</title>
 
-<style>
-*{box-sizing:border-box;}
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-body{
-margin:0;
-padding:0;
-font-family:'Segoe UI',sans-serif;
-background:linear-gradient(135deg,#1a001a,#330033);
-color:white;
-text-align:center;
-}
+    <style>
+        * { box-sizing: border-box; }
 
-section{
-min-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-padding:20px;
-}
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a001a, #330033);
+            color: white;
+            text-align: center;
+            overflow-x: hidden;
+        }
 
-button{
-padding:14px 28px;
-border:none;
-border-radius:30px;
-font-size:16px;
-margin:10px;
-cursor:pointer;
-}
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-#yesBtn{background:#ff4da6;color:white;}
-#noBtn{background:white;color:black;position:absolute;}
+        button {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-.gifts{display:none;gap:20px;flex-direction:column;}
-.gift{
-width:110px;
-height:110px;
-background:#ff66cc;
-border-radius:20px;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:45px;
-cursor:pointer;
-}
+        #yesBtn { background: #ff4da6; color: white; font-weight: bold; }
+        
+        #noBtn { 
+            background: white; 
+            color: black; 
+            position: relative; 
+            z-index: 100;
+        }
 
-/* FLOWER PAGE */
-#flowerPage{
-display:none;
-background:#f8d7df;
-color:#b30059;
-padding:20px;
-min-height:100vh;
-}
+        .gifts-container { 
+            display: none; 
+            gap: 20px; 
+            flex-direction: row; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+        }
 
-.lang-box{
-background:#f4b6c2;
-margin:8px 0;
-padding:12px;
-border-radius:12px;
-width:90%;
-max-width:300px;
-}
+        .gift {
+            width: 110px;
+            height: 110px;
+            background: #ff66cc;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 45px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
 
-/* LETTER PAGE */
-#letterPage{
-display:none;
-background:#7a0019;
-min-height:100vh;
-padding:30px;
-display:flex;
-justify-content:center;
-align-items:center;
-}
+        .gift.opened { opacity: 0.5; cursor: default; }
 
-.letter-card{
-background:#fff8e6;
-color:#7a0019;
-padding:25px;
-border-radius:15px;
-max-width:500px;
-line-height:1.6;
-}
-</style>
+        #flowerPage {
+            display: none;
+            background: #f8d7df;
+            color: #b30059;
+            padding: 20px;
+        }
+
+        .lang-box {
+            background: #f4b6c2;
+            margin: 8px auto;
+            padding: 12px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 300px;
+        }
+
+        #teddyPage {
+            display: none;
+            background: #fff;
+            color: #333;
+        }
+
+        #letterPage {
+            display: none;
+            background: #7a0019;
+            padding: 30px;
+        }
+
+        .letter-card {
+            background: #fff8e6;
+            color: #7a0019;
+            padding: 25px;
+            border-radius: 15px;
+            max-width: 500px;
+            line-height: 1.6;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+    </style>
 </head>
 
-<body>
+<body onclick="startMusic()">
 
-<!-- 🎵 INTRO MUSIC (PLAYS FIRST) -->
-<audio id="introMusic" loop autoplay>
-<source src="intro.mp3" type="audio/mpeg">
-</audio>
+    <audio id="introMusic" loop>
+        <source src="intro.mp3" type="audio/mpeg">
+    </audio>
 
-<!-- 🎵 FORGIVENESS MUSIC -->
-<audio id="forgiveMusic" loop>
-<source src="forgive.mp3" type="audio/mpeg">
-</audio>
+    <audio id="forgiveMusic" loop>
+        <source src="forgive.mp3" type="audio/mpeg">
+    </audio>
 
-<section id="apologySection">
-<h2 id="question">
-I know I'm late… I hadn’t finished it yet.<br><br>
-Will you forgive me?
-</h2>
+    <section id="apologySection">
+        <h2 id="question">
+            I know I'm late… I hadn’t finished it yet.<br><br>
+            Will you forgive me?
+        </h2>
+        <div style="display: flex; justify-content: center; width: 100%;">
+            <button id="yesBtn">YES ❤️</button>
+            <button id="noBtn">NO 😭</button>
+        </div>
+    </section>
 
-<button id="yesBtn">YES ❤️</button>
-<button id="noBtn">NO 😭</button>
-</section>
+    <section id="giftSection" style="display:none;">
+        <h3>Here are your gifts Maya 🎁</h3>
+        <p>Open them all to see your message!</p>
+        <div class="gifts-container" style="display: flex;">
+            <div id="gift1" class="gift" onclick="openGift('flowers')">🎁</div>
+            <div id="gift2" class="gift" onclick="openGift('teddy')">🎁</div>
+        </div>
+    </section>
 
-<section id="giftSection" class="gifts">
-<h3>Here are your gifts 🎁</h3>
-<div class="gift" onclick="openGift('flowers')">🎁</div>
-<div class="gift" onclick="openGift('teddy')">🎁</div>
-<div class="gift" onclick="openGift('baby')">🎁</div>
-</section>
+    <section id="flowerPage">
+        <h1>This is for you 😍</h1>
+        <img src="flowers.jpg" width="220" style="border-radius:20px; margin-bottom: 15px;">
+        <div class="lang-box"><b>ENGLISH</b>: I Love You</div>
+        <div class="lang-box"><b>URDU</b>: میں تم سے پیار کرتا ہوں</div>
+        <div class="lang-box"><b>HINDI</b>: मैं तुमसे प्यार करता हूँ</div>
+        <div class="lang-box"><b>KISII</b>: Nakonde Ninye</div>
+        <button onclick="backToGifts()" style="background:#b30059; color:white;">Back to Gifts 🎁</button>
+    </section>
 
-<section id="flowerPage">
-<h1>This is for you 😍😁</h1>
+    <section id="teddyPage">
+        <h1 style="color: #ff4da6;">A Big Hug for You!</h1>
+        <img src="teddy.jpg" width="250" style="border-radius:20px;">
+        <h2>Meet MAYA the Bear</h2>
+        <button onclick="backToGifts()" style="background:#ff4da6; color:white;">Back to Gifts 🎁</button>
+    </section>
 
-<img src="flowers.jpg" width="220" style="border-radius:20px;">
-
-<div class="lang-box"><b>ENGLISH</b><br>I Love You</div>
-<div class="lang-box"><b>URDU</b><br>میں تم سے پیار کرتا ہوں</div>
-<div class="lang-box"><b>HINDI</b><br>मैं तुमसे प्यार करता हूँ</div>
-<div class="lang-box"><b>FRENCH</b><br>Je T’aime</div>
-<div class="lang-box"><b>SPANISH</b><br>Te Amo</div>
-<div class="lang-box"><b>KISII</b><br>Nakonde Ninye</div>
-
-<p>❤️ ❤️ ❤️ ❤️ ❤️ ❤️ ❤️ ❤️ ❤️ ❤️</p>
-
-<button onclick="showLetter()">Continue ❤️</button>
-</section>
-
-<section id="letterPage">
-<div class="letter-card">
-<h2>My Dearest Valentine 💕</h2>
-
-<p>
-Maya you’ve been my friend,<br>
-Bestfriend,<br>
-and now the Love of my life.
-</p>
-
-<p>
-I really hope this works out.
-I really do.
-</p>
-
-<p>
-I am not going to use this as an escape
-but plzz don't be mad at Caleb for long 🥺
-</p>
-
-<p>
-It took sometime to make.
-I was held up yesterday.
-I am sorry.
-</p>
-
-<p>Plus ooh I forgot... No excuses.</p>
-
-<p><b>DON'T BE MAD FOR SOO LONG.</b></p>
-
-<h3>Forever Yours ❤️</h3>
-</div>
-</section>
+    <section id="letterPage">
+        <div class="letter-card">
+            <h2>My Dearest Valentine 💕</h2>
+            <p>Maya you’ve been my friend,<br>Bestfriend,<br>and now the Love of my life.</p>
+            <p>I really hope this works out. I really do.</p>
+            <p>I am not going to use this as an escape but plzz don't be mad at Caleb for long 🥺</p>
+            <p>It took sometime to make. I was held up yesterday. I am sorry.</p>
+            <p>Plus ooh I forgot... No excuses.</p>
+            <p><b>DON'T BE MAD FOR SOO LONG.</b></p>
+            <h3>Forever Yours ❤️</h3>
+        </div>
+    </section>
 
 <script>
-let noBtn=document.getElementById("noBtn");
-let question=document.getElementById("question");
-let introMusic=document.getElementById("introMusic");
-let forgiveMusic=document.getElementById("forgiveMusic");
+    let noBtn = document.getElementById("noBtn");
+    let question = document.getElementById("question");
+    let introMusic = document.getElementById("introMusic");
+    let forgiveMusic = document.getElementById("forgiveMusic");
+    
+    let giftsOpened = { flowers: false, teddy: false };
+    let musicStarted = false;
 
-noBtn.onclick=function(){
-let x=Math.random()*(window.innerWidth-150);
-let y=Math.random()*(window.innerHeight-150);
-noBtn.style.left=x+"px";
-noBtn.style.top=y+"px";
-question.innerHTML="You can't catch me 😭";
-};
+    function startMusic() {
+        if (!musicStarted) {
+            introMusic.play().catch(e => console.log("Music waiting"));
+            musicStarted = true;
+        }
+    }
 
-document.getElementById("yesBtn").onclick=function(){
-introMusic.pause();
-introMusic.currentTime=0;
-forgiveMusic.play();
+    noBtn.onclick = function() {
+        noBtn.style.position = "fixed";
+        let x = Math.random() * (window.innerWidth - 100);
+        let y = Math.random() * (window.innerHeight - 50);
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
+        question.innerHTML = "prsss Nooo ";
+    };
 
-document.getElementById("apologySection").style.display="none";
-document.getElementById("giftSection").style.display="flex";
-};
+    document.getElementById("yesBtn").onclick = function() {
+        // 🎊 FIRE CONFETTI
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#ff4da6', '#ffffff', '#ff66cc']
+        });
 
-function openGift(type){
-if(type==="flowers"){
-document.getElementById("giftSection").style.display="none";
-document.getElementById("flowerPage").style.display="block";
-}
-}
+        introMusic.pause();
+        forgiveMusic.play();
+        
+        // Short delay so she sees the confetti before the page changes
+        setTimeout(() => {
+            document.getElementById("apologySection").style.display = "none";
+            document.getElementById("giftSection").style.display = "flex";
+        }, 1000);
+    };
 
-function showLetter(){
-document.getElementById("flowerPage").style.display="none";
-document.getElementById("letterPage").style.display="flex";
-}
+    function openGift(type) {
+        document.getElementById("giftSection").style.display = "none";
+        if (type === 'flowers') {
+            giftsOpened.flowers = true;
+            document.getElementById("gift1").classList.add("opened");
+            document.getElementById("gift1").innerHTML = "🌸";
+            document.getElementById("flowerPage").style.display = "flex";
+        } else if (type === 'teddy') {
+            giftsOpened.teddy = true;
+            document.getElementById("gift2").classList.add("opened");
+            document.getElementById("gift2").innerHTML = "🧸";
+            document.getElementById("teddyPage").style.display = "flex";
+        }
+    }
+
+    function backToGifts() {
+        document.getElementById("flowerPage").style.display = "none";
+        document.getElementById("teddyPage").style.display = "none";
+        
+        if (giftsOpened.flowers && giftsOpened.teddy) {
+            document.getElementById("letterPage").style.display = "flex";
+        } else {
+            document.getElementById("giftSection").style.display = "flex";
+        }
+    }
 </script>
 
 </body>
