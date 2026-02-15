@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Maya ❤️</title>
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+margin:0;
+padding:0;
+font-family:'Segoe UI',sans-serif;
+background:linear-gradient(135deg,#1a001a,#330033);
+color:white;
+text-align:center;
+}
+
+section{
+min-height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+
+button{
+padding:14px 28px;
+border:none;
+border-radius:30px;
+font-size:16px;
+margin:10px;
+cursor:pointer;
+}
+
+#yesBtn{background:#ff4da6;color:white;}
+#noBtn{background:white;color:black;position:absolute;}
+
+.gifts{display:none;gap:20px;flex-direction:column;}
+.gift{
+width:110px;
+height:110px;
+background:#ff66cc;
+border-radius:20px;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:45px;
+cursor:pointer;
+}
+
+/* FLOWER PAGE */
+#flowerPage{
+display:none;
+background:#f8d7df;
+color:#b30059;
+padding:20px;
+min-height:100vh;
+}
+
+.lang-box{
+background:#f4b6c2;
+margin:8px 0;
+padding:12px;
+border-radius:12px;
+width:90%;
+max-width:300px;
+}
+
+/* LETTER PAGE */
+#letterPage{
+display:none;
+background:#7a0019;
+min-height:100vh;
+padding:30px;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.letter-card{
+background:#fff8e6;
+color:#7a0019;
+padding:25px;
+border-radius:15px;
+max-width:500px;
+line-height:1.6;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 INTRO MUSIC (PLAYS FIRST) -->
+<audio id="introMusic" loop autoplay>
+<source src="intro.mp3" type="audio/mpeg">
+</audio>
+
+<!-- 🎵 FORGIVENESS MUSIC -->
+<audio id="forgiveMusic" loop>
+<source src="forgive.mp3" type="audio/mpeg">
+</audio>
+
+<section id="apologySection">
+<h2 id="question">
+I know I'm late… I hadn’t finished it yet.<br><br>
+Will you forgive me?
+</h2>
+
+<button id="yesBtn">YES ❤️</button>
+<button id="noBtn">NO 😭</button>
+</section>
+
+<section id="giftSection" class="gifts">
+<h3>Here are your gifts 🎁</h3>
+<div class="gift" onclick="openGift('flowers')">🎁</div>
+<div class="gift" onclick="openGift('teddy')">🎁</div>
+<div class="gift" onclick="openGift('baby')">🎁</div>
+</section>
+
+<section id="flowerPage">
+<h1>This is for you 😍😁</h1>
+
+<img src="flowers.jpg" width="220" style="border-radius:20px;">
+
+<div class="lang-box"><b>ENGLISH</b><br>I Love You</div>
+<div class="lang-box"><b>URDU</b><br>میں تم سے پیار کرتا ہوں</div>
+<div class="lang-box"><b>HINDI</b><br>मैं तुमसे प्यार करता हूँ</div>
+<div class="lang-box"><b>FRENCH</b><br>Je T’aime</div>
+<div class="lang-box"><b>SPANISH</b><br>Te Amo</div>
+<div class="lang-box"><b>KISII</b><br>Nakonde Ninye</div>
+
+<p>❤️ ❤️ ❤️ ❤️ ❤️ ❤️ ❤️ ❤️ ❤️ ❤️</p>
+
+<button onclick="showLetter()">Continue ❤️</button>
+</section>
+
+<section id="letterPage">
+<div class="letter-card">
+<h2>My Dearest Valentine 💕</h2>
+
+<p>
+Maya you’ve been my friend,<br>
+Bestfriend,<br>
+and now the Love of my life.
+</p>
+
+<p>
+I really hope this works out.
+I really do.
+</p>
+
+<p>
+I am not going to use this as an escape
+but plzz don't be mad at Caleb for long 🥺
+</p>
+
+<p>
+It took sometime to make.
+I was held up yesterday.
+I am sorry.
+</p>
+
+<p>Plus ooh I forgot... No excuses.</p>
+
+<p><b>DON'T BE MAD FOR SOO LONG.</b></p>
+
+<h3>Forever Yours ❤️</h3>
+</div>
+</section>
+
+<script>
+let noBtn=document.getElementById("noBtn");
+let question=document.getElementById("question");
+let introMusic=document.getElementById("introMusic");
+let forgiveMusic=document.getElementById("forgiveMusic");
+
+noBtn.onclick=function(){
+let x=Math.random()*(window.innerWidth-150);
+let y=Math.random()*(window.innerHeight-150);
+noBtn.style.left=x+"px";
+noBtn.style.top=y+"px";
+question.innerHTML="You can't catch me 😭";
+};
+
+document.getElementById("yesBtn").onclick=function(){
+introMusic.pause();
+introMusic.currentTime=0;
+forgiveMusic.play();
+
+document.getElementById("apologySection").style.display="none";
+document.getElementById("giftSection").style.display="flex";
+};
+
+function openGift(type){
+if(type==="flowers"){
+document.getElementById("giftSection").style.display="none";
+document.getElementById("flowerPage").style.display="block";
+}
+}
+
+function showLetter(){
+document.getElementById("flowerPage").style.display="none";
+document.getElementById("letterPage").style.display="flex";
+}
+</script>
+
+</body>
+</html>
