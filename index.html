@@ -35,16 +35,24 @@
             font-size: 16px;
             margin: 10px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.2s;
         }
 
-        #yesBtn { background: #ff4da6; color: white; font-weight: bold; }
+        #yesBtn { background: #ff4da6; color: white; font-weight: bold; position: relative; z-index: 10; }
         
         #noBtn { 
             background: white; 
             color: black; 
             position: relative; 
             z-index: 100;
+        }
+
+        #idiotBtn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            font-size: 12px;
+            border: 1px solid #444;
+            margin-top: 50px;
         }
 
         .gifts-container { 
@@ -68,33 +76,14 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        .gift.opened { opacity: 0.5; cursor: default; }
-
         #flowerPage, #teddyPage, #idiotPage {
             display: none;
             padding: 20px;
         }
 
         #flowerPage { background: #f8d7df; color: #b30059; }
-
-        .lang-box {
-            background: #f4b6c2;
-            margin: 8px auto;
-            padding: 12px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 300px;
-        }
-
         #teddyPage { background: #fff; color: #333; }
-
-        #idiotPage { background: #222; color: #fff; }
-
-        #letterPage {
-            display: none;
-            background: #7a0019;
-            padding: 30px;
-        }
+        #idiotPage { background: #000; color: #fff; }
 
         .letter-card {
             background: #fff8e6;
@@ -123,24 +112,23 @@
             I know I'm late… I hadn’t finished it yet.<br><br>
             Will you forgive me?
         </h2>
-        <div style="display: flex; justify-content: center; width: 100%;">
-            <button id="yesBtn">YES ❤️</button>
-            <button id="noBtn">NO 😭</button>
+        <div style="display: flex; justify-content: center; gap: 10px;">
+            <button id="yesBtn" onclick="handleYesClick()">YES ❤️</button>
+            <button id="noBtn" onclick="handleNoClick()">NO 😭</button>
         </div>
-        <p style="margin-top: 50px; opacity: 0.6; cursor: pointer;" onclick="viewIdiot()">View the Terrible person caleb</p>
+        <button id="idiotBtn" onclick="viewIdiot()">Click to view the terrible person Caleb</button>
     </section>
 
     <section id="idiotPage">
-        <h1>Terrible Person Identified</h1>
-        <img src="idiot.jpg" width="250" style="border-radius:20px; border: 5px solid red;">
-        <p>I'll do better I promise, Love,,,</p>
+        <h1>Terrible Person Spotted</h1>
+        <img src="idiot.jpg" width="250" style="border-radius:20px; border: 4px solid red;">
+        <p>I'll do better I promise. Love,,,</p>
         <button onclick="closeIdiot()" style="background: white; color: black;">Go Back</button>
     </section>
 
     <section id="giftSection" style="display:none;">
         <h3>Here are your gifts Maya 🎁</h3>
-        <p>Open them all to see your message!</p>
-        <div class="gifts-container" style="display: flex;">
+        <div id="giftDisplay" class="gifts-container" style="display: flex;">
             <div id="gift1" class="gift" onclick="openGift('flowers')">🎁</div>
             <div id="gift2" class="gift" onclick="openGift('teddy')">🎁</div>
         </div>
@@ -148,108 +136,90 @@
 
     <section id="flowerPage">
         <h1>This is for you 😍</h1>
-        <img src="flowers.jpg" width="220" style="border-radius:20px; margin-bottom: 15px;">
-        <div class="lang-box"><b>ENGLISH</b>: I Love You</div>
-        <div class="lang-box"><b>URDU</b>: میں تم سے پیار کرتا ہوں</div>
-        <div class="lang-box"><b>HINDI</b>: मैं तुमसे प्यार करता हूँ</div>
-        <div class="lang-box"><b>KISII</b>: Nakonde Ninye</div>
+        <img src="flowers.jpg" width="220" style="border-radius:20px;">
+        <p><b>ENGLISH</b>: I Love You</p>
+        <p><b>URDU</b>: میں تم سے پیار کرتا ہوں</p>
         <button onclick="backToGifts()" style="background:#b30059; color:white;">Back to Gifts 🎁</button>
     </section>
 
     <section id="teddyPage">
-        <h1 style="color: #ff4da6;">A Big Hug for You!</h1>
+        <h1 style="color: #ff4da6;">A Big Hug!</h1>
         <img src="teddy.jpg" width="250" style="border-radius:20px;">
         <h2>Virtually now, real later.</h2>
         <button onclick="backToGifts()" style="background:#ff4da6; color:white;">Back to Gifts 🎁</button>
     </section>
 
-    <section id="letterPage">
+    <section id="letterPage" style="display:none;">
         <div class="letter-card">
             <h2>My Dearest Valentine 💕</h2>
-            <p>Maya you’ve been my friend,<br>Bestfriend,<br>and now the Love of my life.</p>
-            <p>I really hope this works out. I really do.</p>
-            <p>I am not going to use this as an escape but plzz don't be mad at Caleb for long 🥺</p>
-            <p>It took sometime to make. I was held up yesterday. I am sorry.</p>
-            <p>Plus ooh I forgot... No excuses.</p>
+            <p>Maya you’ve been my friend, Bestfriend, and now the Love of my life.</p>
+            <p>I really hope this works out. I am not going to use this as an escape but plzz don't be mad at Caleb for long 🥺</p>
+            <p>It took sometime to make. I am sorry. Plus ooh I forgot... No excuses.</p>
             <p><b>DON'T BE MAD FOR SOO LONG.</b></p>
             <h3>Forever Yours ❤️</h3>
         </div>
     </section>
 
 <script>
-    let noBtn = document.getElementById("noBtn");
-    let question = document.getElementById("question");
-    let introMusic = document.getElementById("introMusic");
-    let forgiveMusic = document.getElementById("forgiveMusic");
-    
-    let giftsOpened = { flowers: false, teddy: false };
+    const introMusic = document.getElementById("introMusic");
+    const forgiveMusic = document.getElementById("forgiveMusic");
     let musicStarted = false;
-
-    // No button messages loop
-    const messages = [
-        "nope not an option",
-        "Zae !!!!",
-        "say Prsss say yes",
-        "Weh choose another option"
-    ];
-    let msgIndex = 0;
+    let giftsOpened = { flowers: false, teddy: false };
 
     function startMusic() {
         if (!musicStarted) {
-            introMusic.play().catch(e => console.log("Music waiting"));
+            introMusic.play().catch(() => {});
             musicStarted = true;
         }
     }
 
-    noBtn.onclick = function() {
+    // --- YES BUTTON LOGIC ---
+    function handleYesClick() {
+        // 🎊 Fire Confetti
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#ff4da6', '#ffffff']
+        });
+
+        // Swap Music
+        introMusic.pause();
+        forgiveMusic.play();
+
+        // Switch Sections
+        document.getElementById("apologySection").style.display = "none";
+        document.getElementById("giftSection").style.display = "flex";
+    }
+
+    // --- NO BUTTON LOGIC ---
+    const messages = ["nope not an option", "Zae !!!!", "say Prsss say yes", "Weh choose another option"];
+    let msgIndex = 0;
+
+    function handleNoClick() {
+        const noBtn = document.getElementById("noBtn");
         noBtn.style.position = "fixed";
         
-        // Let it run to the sides (left 10% or right 80%)
-        let sideX = Math.random() < 0.5 ? 50 : (window.innerWidth - 150);
+        // Jumps to Far Left or Far Right margins only
+        let sideX = Math.random() < 0.5 ? 30 : (window.innerWidth - 150);
         let randomY = Math.random() * (window.innerHeight - 100);
         
         noBtn.style.left = sideX + "px";
         noBtn.style.top = randomY + "px";
         
-        // Loop messages
-        question.innerHTML = messages[msgIndex];
+        document.getElementById("question").innerHTML = messages[msgIndex];
         msgIndex = (msgIndex + 1) % messages.length;
-    };
-
-    document.getElementById("yesBtn").onclick = function() {
-        // Heart-shaped confetti
-        var scalar = 2;
-        var heart = confetti.shapeFromPath({ path: 'M0 10 C0 6, 3 2, 6 2 C9 2, 12 6, 12 10 C12 14, 6 20, 0 24 C-6 20, -12 14, -12 10 C-12 6, -9 2, -6 2 C-3 2, 0 6, 0 10' });
-
-        confetti({
-            shapes: [heart],
-            particleCount: 80,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#ff4da6', '#ff0000', '#ffffff'],
-            scalar: scalar
-        });
-
-        introMusic.pause();
-        forgiveMusic.play();
-        
-        setTimeout(() => {
-            document.getElementById("apologySection").style.display = "none";
-            document.getElementById("giftSection").style.display = "flex";
-        }, 1000);
-    };
+    }
 
     function openGift(type) {
         document.getElementById("giftSection").style.display = "none";
         if (type === 'flowers') {
             giftsOpened.flowers = true;
-            document.getElementById("gift1").classList.add("opened");
-            document.getElementById("gift1").innerHTML = "🌸";
+            document.getElementById("gift1").style.opacity = "0.3";
             document.getElementById("flowerPage").style.display = "flex";
-        } else if (type === 'teddy') {
+        } else {
             giftsOpened.teddy = true;
-            document.getElementById("gift2").classList.add("opened");
-            document.getElementById("gift2").innerHTML = "🧸";
+            document.getElementById("gift2").style.opacity = "0.3";
             document.getElementById("teddyPage").style.display = "flex";
         }
     }
@@ -265,7 +235,6 @@
         }
     }
 
-    // Caleb Section Logic
     function viewIdiot() {
         document.getElementById("apologySection").style.display = "none";
         document.getElementById("idiotPage").style.display = "flex";
@@ -275,6 +244,5 @@
         document.getElementById("apologySection").style.display = "flex";
     }
 </script>
-
 </body>
 </html>
