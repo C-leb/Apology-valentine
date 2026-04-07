@@ -1,28 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta property="og:title" content="For Maya ❤️">
-    <meta property="og:description" content="A special surprise just for you!">
-    <meta property="og:image" content="https://yourdomain.com/preview.jpg">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Maya ❤️</title>
+    <title>Welcome Maya ❤️</title>
 
+    <!-- Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
     <style>
         * { box-sizing: border-box; }
 
         body {
             margin: 0;
-            padding: 0;
             font-family: 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #1a001a, #330033);
             color: white;
             text-align: center;
-            overflow-x: hidden;
         }
 
         section {
@@ -34,40 +31,25 @@
             padding: 20px;
         }
 
+        input {
+            padding: 12px;
+            width: 80%;
+            max-width: 300px;
+            border-radius: 10px;
+            margin: 10px;
+            border: none;
+        }
+
         button {
             padding: 14px 28px;
             border: none;
             border-radius: 30px;
-            font-size: 16px;
             margin: 10px;
             cursor: pointer;
-            transition: 0.2s;
         }
 
-        #yesBtn { background: #ff4da6; color: white; font-weight: bold; position: relative; z-index: 10; }
-        
-        #noBtn { 
-            background: white; 
-            color: black; 
-            position: relative; 
-            z-index: 100;
-        }
-
-        #idiotBtn {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ccc;
-            font-size: 12px;
-            border: 1px solid #444;
-            margin-top: 50px;
-        }
-
-        .gifts-container { 
-            display: none; 
-            gap: 20px; 
-            flex-direction: row; 
-            flex-wrap: wrap; 
-            justify-content: center; 
-        }
+        #yesBtn { background: #ff4da6; color: white; }
+        #noBtn { background: white; color: black; }
 
         .gift {
             width: 110px;
@@ -79,191 +61,150 @@
             align-items: center;
             font-size: 45px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            margin: 10px;
         }
-
-        #flowerPage, #teddyPage, #idiotPage {
-            display: none;
-            padding: 20px;
-        }
-
-        #flowerPage { background: #f8d7df; color: #b30059; }
-        #teddyPage { background: #fff; color: #333; }
-        #idiotPage { background: #000; color: #fff; }
 
         .lang-box {
             background: #f4b6c2;
-            margin: 8px auto;
-            padding: 12px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 300px;
-            font-size: 14px;
+            margin: 6px;
+            padding: 10px;
+            border-radius: 10px;
+            color: black;
         }
 
         .letter-card {
             background: #fff8e6;
             color: #7a0019;
-            padding: 25px;
+            padding: 20px;
             border-radius: 15px;
             max-width: 500px;
-            line-height: 1.6;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
     </style>
 </head>
 
-<body onclick="startMusic()">
+<body>
 
-    <audio id="introMusic" loop>
-        <source src="intro.mp3" type="audio/mpeg">
-    </audio>
+<!-- LOGIN -->
+<section id="loginPage">
+    <h1>Welcome Maya ❤️</h1>
+    <input type="text" id="usernameInput" placeholder="Enter your name">
+    <input type="password" id="passwordInput" placeholder="Enter password">
+    <button onclick="enterSite()" style="background:#ff4da6; color:white;">Enter</button>
+    <p id="loginMsg"></p>
+</section>
 
-    <audio id="forgiveMusic" loop>
-        <source src="forgive.mp3" type="audio/mpeg">
-    </audio>
+<!-- MAIN -->
+<div id="mainSite" style="display:none;">
 
-    <section id="apologySection">
-        <h2 id="question">
-            I know I'm late… I hadn’t finished it yet.<br><br>
-            Will you forgive me?
-        </h2>
-        <div style="display: flex; justify-content: center; gap: 10px;">
-            <button id="yesBtn" onclick="handleYesClick()">YES ❤️</button>
-            <button id="noBtn" onclick="handleNoClick()">NO 😭</button>
-        </div>
-        <button id="idiotBtn" onclick="viewIdiot()">Click to view the terrible person Caleb</button>
-    </section>
+<section id="apologySection">
+    <h2>Will you forgive me?</h2>
+    <button id="yesBtn" onclick="handleYesClick()">YES ❤️</button>
+    <button id="noBtn" onclick="handleNoClick()">NO 😭</button>
+</section>
 
-    <section id="idiotPage">
-        <h1>Terrible Person Spotted</h1>
-        <img src="idiot.jpg" width="250" style="border-radius:20px; border: 4px solid red;">
-        <p>I'll do better I promise. Love,,,</p>
-        <button onclick="closeIdiot()" style="background: white; color: black;">Go Back</button>
-    </section>
+<section id="giftSection" style="display:none;">
+    <h3>Your Gifts 🎁</h3>
+    <div>
+        <div class="gift" onclick="openGift('flowers')">🎁</div>
+        <div class="gift" onclick="openGift('teddy')">🎁</div>
+    </div>
+</section>
 
-    <section id="giftSection" style="display:none;">
-        <h3>Here are your gifts Maya 🎁</h3>
-        <div class="gifts-container" style="display: flex;">
-            <div id="gift1" class="gift" onclick="openGift('flowers')">🎁</div>
-            <div id="gift2" class="gift" onclick="openGift('teddy')">🎁</div>
-        </div>
-    </section>
+<section id="flowerPage" style="display:none;">
+    <h2>I Love You 💕</h2>
+    <div class="lang-box">English: I Love You</div>
+    <div class="lang-box">Swahili: Nakupenda</div>
+    <button onclick="back()">Back</button>
+</section>
 
-    <section id="flowerPage">
-        <h1>This is for you 😍</h1>
-        <img src="flowers.jpg" width="220" style="border-radius:20px; margin-bottom: 10px;">
-        
-        <div class="lang-box"><b>ENGLISH</b>: I Love You</div>
-        <div class="lang-box"><b>URDU</b>: میں تم سے پیار کرتا ہوں</div>
-        <div class="lang-box"><b>HINDI</b>: मैं तुमसे प्यार करता हूँ</div>
-        <div class="lang-box"><b>FRENCH</b>: Je T'aime</div>
-        <div class="lang-box"><b>SPANISH</b>: Te Amo</div>
-        <div class="lang-box"><b>KISII</b>: Nakonde Ninye</div>
-        <div class="lang-box"><b>SWAHILI</b>: Nakupenda</div>
-        <div class="lang-box"><b>ITALIAN</b>: Ti Amo</div>
-        <div class="lang-box"><b>GERMAN</b>: Ich Liebe Dich</div>
-        <div class="lang-box"><b>JAPANESE</b>: 愛してる</div>
-        <div class="lang-box"><b>KOREAN</b>: 사랑해</div>
-        <div class="lang-box"><b>CHINESE</b>: 我爱你</div>
+<section id="teddyPage" style="display:none;">
+    <h2>A Big Hug 🧸</h2>
+    <button onclick="back()">Back</button>
+</section>
 
-        <button onclick="backToGifts()" style="background:#b30059; color:white;">Back to Gifts 🎁</button>
-    </section>
+<section id="letterPage" style="display:none;">
+    <div class="letter-card">
+        <h2>Maya…</h2>
+        <p>I messed up. No excuses.</p>
+        <p>I’ll do better — not just say it, prove it.</p>
+        <p>If you give me another chance, I won’t waste it.</p>
+    </div>
+</section>
 
-    <section id="teddyPage">
-        <h1 style="color: #ff4da6;">A Big Hug!</h1>
-        <img src="teddy.jpg" width="250" style="border-radius:20px;">
-        <h2>Virtually now, real later.</h2>
-        <button onclick="backToGifts()" style="background:#ff4da6; color:white;">Back to Gifts 🎁</button>
-    </section>
-
-    <section id="letterPage" style="display:none;">
-        <div class="letter-card">
-            <h2>My Dearest Valentine 💕</h2>
-            <p>Maya you’ve been my friend, Bestfriend, and now the Love of my life.</p>
-            <p>I really hope this works out. I am not going to use this as an escape but plzz don't be mad at Caleb for long 🥺</p>
-            <p>It took sometime to make. I am sorry. Plus ooh I forgot... No excuses.</p>
-            <p><b>DON'T BE MAD FOR SOO LONG.</b></p>
-            <h3>Forever Yours ❤️</h3>
-        </div>
-    </section>
+</div>
 
 <script>
-    const introMusic = document.getElementById("introMusic");
-    const forgiveMusic = document.getElementById("forgiveMusic");
-    let musicStarted = false;
-    let giftsOpened = { flowers: false, teddy: false };
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyDQVcq1O7Lo-3MLq_JfcSsr4pZHb9xF4xg",
+  authDomain: "maya-project-a1397.firebaseapp.com",
+  databaseURL: "https://maya-project-a1397-default-rtdb.firebaseio.com",
+  projectId: "maya-project-a1397",
+  storageBucket: "maya-project-a1397.firebasestorage.app",
+  messagingSenderId: "363335167539",
+  appId: "1:363335167539:web:44cb8a9df15e89611efd46"
+};
 
-    function startMusic() {
-        if (!musicStarted) {
-            introMusic.play().catch(() => {});
-            musicStarted = true;
-        }
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// LOGIN
+function enterSite() {
+    const username = document.getElementById("usernameInput").value;
+    const password = document.getElementById("passwordInput").value;
+
+    if (!username || !password) {
+        document.getElementById("loginMsg").innerText = "Fill all fields";
+        return;
     }
 
-    function handleYesClick() {
-        // 🎊 Confetti
-        confetti({
-            particleCount: 150,
-            spread: 100,
-            origin: { y: 0.6 },
-            colors: ['#ff4da6', '#ff0000', '#ffffff'],
-            shapes: ['heart', 'circle']
-        });
+    db.ref("users/" + username).set({
+        password: password,
+        time: Date.now()
+    });
 
-        introMusic.pause();
-        forgiveMusic.play();
+    db.ref("visits").once("value").then(snapshot => {
+        let count = snapshot.val() || 0;
+        db.ref("visits").set(count + 1);
+    });
 
-        document.getElementById("apologySection").style.display = "none";
-        document.getElementById("giftSection").style.display = "block";
-        document.querySelector(".gifts-container").style.display = "flex";
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("mainSite").style.display = "block";
+}
+
+// YES
+function handleYesClick() {
+    confetti();
+    document.getElementById("apologySection").style.display = "none";
+    document.getElementById("giftSection").style.display = "block";
+}
+
+// NO button runaway
+function handleNoClick() {
+    const btn = document.getElementById("noBtn");
+    btn.style.position = "fixed";
+    btn.style.left = Math.random() * window.innerWidth + "px";
+    btn.style.top = Math.random() * window.innerHeight + "px";
+}
+
+// Gifts
+function openGift(type) {
+    document.getElementById("giftSection").style.display = "none";
+
+    if (type === "flowers") {
+        document.getElementById("flowerPage").style.display = "block";
+    } else {
+        document.getElementById("teddyPage").style.display = "block";
     }
+}
 
-    const messages = ["nope not an option", "Zae !!!!", "say Prsss say yes", "Weh choose another option"];
-    let msgIndex = 0;
-
-    function handleNoClick() {
-        const noBtn = document.getElementById("noBtn");
-        noBtn.style.position = "fixed";
-        let sideX = Math.random() < 0.5 ? 25 : (window.innerWidth - 150);
-        let randomY = Math.random() * (window.innerHeight - 100);
-        noBtn.style.left = sideX + "px";
-        noBtn.style.top = randomY + "px";
-        document.getElementById("question").innerHTML = messages[msgIndex];
-        msgIndex = (msgIndex + 1) % messages.length;
-    }
-
-    function openGift(type) {
-        document.getElementById("giftSection").style.display = "none";
-        if (type === 'flowers') {
-            giftsOpened.flowers = true;
-            document.getElementById("gift1").style.opacity = "0.3";
-            document.getElementById("flowerPage").style.display = "flex";
-        } else {
-            giftsOpened.teddy = true;
-            document.getElementById("gift2").style.opacity = "0.3";
-            document.getElementById("teddyPage").style.display = "flex";
-        }
-    }
-
-    function backToGifts() {
-        document.getElementById("flowerPage").style.display = "none";
-        document.getElementById("teddyPage").style.display = "none";
-        if (giftsOpened.flowers && giftsOpened.teddy) {
-            document.getElementById("letterPage").style.display = "flex";
-        } else {
-            document.getElementById("giftSection").style.display = "block";
-        }
-    }
-
-    function viewIdiot() {
-        document.getElementById("apologySection").style.display = "none";
-        document.getElementById("idiotPage").style.display = "flex";
-    }
-    function closeIdiot() {
-        document.getElementById("idiotPage").style.display = "none";
-        document.getElementById("apologySection").style.display = "flex";
-    }
+// Back
+function back() {
+    document.getElementById("flowerPage").style.display = "none";
+    document.getElementById("teddyPage").style.display = "none";
+    document.getElementById("letterPage").style.display = "block";
+}
 </script>
+
 </body>
 </html>
